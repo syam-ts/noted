@@ -12,17 +12,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const userRoute_1 = __importDefault(require("./routes/userRoute"));
-const dotenv_1 = require("dotenv");
-(0, dotenv_1.config)({ path: ".env" });
-const body_parser_1 = __importDefault(require("body-parser"));
-const db_1 = __importDefault(require("./config/db"));
-const app = (0, express_1.default)();
-app.use(body_parser_1.default.json());
-app.use("/user", userRoute_1.default);
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => __awaiter(void 0, void 0, void 0, function* () {
-    (0, db_1.default)();
-    console.log(`Server listening to PORT ${PORT}`);
-}));
+const mongoose_1 = __importDefault(require("mongoose"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config({ path: ".env" });
+const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const uri = process.env.MONGO_URI;
+        yield mongoose_1.default.connect(uri, {
+            serverSelectionTimeoutMS: 5000,
+            socketTimeoutMS: 45000,
+            tlsAllowInvalidCertificates: true,
+        });
+    }
+    catch (err) {
+        console.error("Database connection failed:", err.message);
+        setTimeout(connectDB, 5000);
+    }
+});
+exports.default = connectDB;
