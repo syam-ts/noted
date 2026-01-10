@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { userModel } from "../model/userModel/userMdl";
+import { IUser, userModel } from "../model/userModel/userMdl";
 
 const userController = {
   signup: async (req: Request, res: Response) => {
@@ -21,12 +21,17 @@ const userController = {
   login: async (req: Request, res: Response) => {
     try {
       const { email, password } = req.body;
-      const findUser = await userModel.find({
-        email: email,
-        password: password,
-      });
+      const findUser = await userModel
+        .find({
+          email: email,
+          password: password,
+        })
+        .lean<IUser>();
       if (findUser) {
-        res.send("user found");
+        res.json({
+          data: { id: findUser._id, userName: findUser.userName },
+          message: "user found",
+        });
       } else {
         res.send("user not found");
       }

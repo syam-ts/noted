@@ -1,18 +1,16 @@
 import express from "express";
+import connectDB from "./config/db";
+import bodyParser from "body-parser";
+import noteRouter from "./routes/postRoute";
 import userRouter from "./routes/userRoute";
 import { config } from "dotenv";
-
 config({ path: ".env" });
-
-import bodyParser from "body-parser";
-import connectDB from "./config/db";
-import postRouter from "./routes/postRoute";
 
 const app = express();
 app.use(bodyParser.json());
 
 app.use("/user", userRouter);
-app.use("/post", postRouter);
+app.use("/note", noteRouter);
 
 const PORT = process.env.PORT || 3001;
 

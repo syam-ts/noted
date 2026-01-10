@@ -1,11 +1,9 @@
 import { Router } from "express";
-import postController from "../controller/postCtrl";
+import noteController from "../controller/noteCtrl";
 
-const postRouter = Router();
+const noteRouter = Router();
 
-postRouter.post("/new", postController.createPost);
-postRouter.put("/new", postController.ediPost);
-postRouter.put("/new", postController.likePost);
-postRouter.put("/new", postController.commentPost);
+noteRouter.post("/new", noteController.newNote);
+noteRouter.put("/edit", noteController.ediNote);
 
-export default postRouter;
+export default noteRouter;
