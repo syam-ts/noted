@@ -5,18 +5,19 @@ const noteController = {
   newNote: async (req: Request, res: Response) => {
     try {
       const { title, content }: { title: string; content: string } = req.body;
-      const userId = "test_userId";
+      console.log('da', title)
+      const userId ='69639a071104348b49c726a8';
 
       const newNote = new noteModel({
         userId,
         title,
-        content,
+        content,  
         createdAt: Date.now(),
       });
 
       const savedNote = await newNote.save();
 
-      res.send("successfully created new note");
+      res.status(201).send("successfully created new note");
     } catch (err) {
       res.send(err);
     }
@@ -24,7 +25,7 @@ const noteController = {
   ediNote: async (req: Request, res: Response) => {
     try {
       const { noteId, title, content } = req.body;
-      const userId = "test_userId";
+      const userId = "69639a071104348b49c726a8";
 
       const findNote = await noteModel.find({ objectId: noteId });
 
@@ -41,6 +42,24 @@ const noteController = {
         );
 
         res.send("successfully edited note");
+      } else {
+        res.send("note not found");
+      }
+    } catch (err) {
+      res.send(err);
+    }
+  },
+  fetchAll: async (req: Request, res: Response) => {
+    try { 
+      const userId = "69639a071104348b49c726a8";
+
+      const findNotes = await noteModel.find({userId});
+      console.log('if user: ',findNotes)
+
+      if (findNotes) {
+         
+
+        res.json({data: findNotes, message: 'successfully loaded notes'});
       } else {
         res.send("note not found");
       }

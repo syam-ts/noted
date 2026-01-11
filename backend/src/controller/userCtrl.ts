@@ -4,8 +4,9 @@ import { IUser, userModel } from "../model/userModel/userMdl";
 const userController = {
   signup: async (req: Request, res: Response) => {
     try {
-      const { email, password } = req.body;
+      const { userName, email, password } = req.body;
       const signupUser = new userModel({
+        userName,
         email,
         password,
       });

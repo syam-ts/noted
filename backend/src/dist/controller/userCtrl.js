@@ -13,8 +13,9 @@ const userMdl_1 = require("../model/userModel/userMdl");
 const userController = {
     signup: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            const { email, password } = req.body;
+            const { userName, email, password } = req.body;
             const signupUser = new userMdl_1.userModel({
+                userName,
                 email,
                 password,
             });
@@ -29,12 +30,17 @@ const userController = {
     login: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const { email, password } = req.body;
-            const findUser = yield userMdl_1.userModel.find({
+            const findUser = yield userMdl_1.userModel
+                .find({
                 email: email,
                 password: password,
-            });
+            })
+                .lean();
             if (findUser) {
-                res.send("user found");
+                res.json({
+                    data: { id: findUser._id, userName: findUser.userName },
+                    message: "user found",
+                });
             }
             else {
                 res.send("user not found");
